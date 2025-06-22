@@ -1,0 +1,24 @@
+
+services:
+  scanner:
+    build: ./scanner
+    container_name: scanner
+    network_mode: host
+    privileged: true
+    volumes:
+      - ./db:/db
+      - ./xmls:/xmls
+    env_file:
+      - .env
+
+  webapp:
+    build: ./webapp
+    container_name: webapp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./db:/db
+    env_file:
+      - .env
+    depends_on:
+      - scanner

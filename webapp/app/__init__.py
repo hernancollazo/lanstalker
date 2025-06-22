@@ -1,0 +1,43 @@
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DB_PATH = os.getenv("DB_PATH", "/db/network.db")
+SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME")
+
+app = Flask(__name__)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = SECRET_KEY
+
+print(f'Using Database: {DB_PATH}')
+print(f'Secret Key: {SECRET_KEY}')
+
+db = SQLAlchemy(app)
+
+from app.models import User
+from app import routes
+
+# Create tables on startup
+with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(username="admin").first():
+        u = User(username="admin")
+        u.set_password("changeme")
+        db.session.add(u)
+        db.session.commit()
+
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

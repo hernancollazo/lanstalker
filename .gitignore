@@ -1,0 +1,16 @@
+*~
+*.swp
+*.conf
+*.json
+*.cfg
+*.log
+*.config
+*.pyc
+*.tox
+*.cer
+*.pem
+*.bkp
+*.env
+__pycache__
+db/*
+xmls/*

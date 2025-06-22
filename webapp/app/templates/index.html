@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Dashboard</h1>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-bg-primary shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-hdd-network-fill fs-2 me-3"></i>
+                        <div>
+                            <h5 class="card-title">Total Hosts</h5>
+                            <p class="card-text fs-4">{{ total_hosts }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-bg-success shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-diagram-3-fill fs-2 me-3"></i>
+                        <div>
+                            <h5 class="card-title">Unique MAC Addresses</h5>
+                            <p class="card-text fs-4">{{ total_macs }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-bg-warning shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-plug-fill fs-2 me-3"></i>
+                        <div>
+                            <h5 class="card-title">Ports Discovered</h5>
+                            <p class="card-text fs-4">{{ total_ports }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-bg-secondary shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-clock-history fs-2 me-3"></i>
+                        <div>
+                            <h5 class="card-title">Last Seen Activity</h5>
+                            <p class="card-text fs-5">
+                                {{ latest_seen.strftime('%Y-%m-%d %H:%M:%S') if latest_seen else 'N/A' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-bg-dark shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-person-check-fill fs-2 me-3"></i>
+                        <div>
+                            <h5 class="card-title">Hosts Seen in Last 24h</h5>
+                            <p class="card-text fs-4">{{ last_24h }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

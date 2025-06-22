@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Host Change Log{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">📝 Host Change Log</h1>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Timestamp</th>
+                <th>MAC Address</th>
+                <th>Old IP</th>
+                <th>New IP</th>
+                <th>Change Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td><code>{{ entry.mac }}</code></td>
+                <td>{{ entry.old_ip or '—' }}</td>
+                <td>{{ entry.new_ip or '—' }}</td>
+                <td>
+                    {% if entry.change_type == 'new' %}
+                    <span class="badge bg-success">New</span>
+                    {% elif entry.change_type == 'ip_change' %}
+                    <span class="badge bg-warning text-dark">IP Change</span>
+                    {% else %}
+                    <span class="badge bg-secondary">{{ entry.change_type }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}LANStalker{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">🧭 LANStalker</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        <div class="container mt-5">
+            <h2>Login</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button class="btn btn-primary">Login</button>
+            </form>
+        </div>
+        {% endblock %}
+    </div>
+    <br />
+    <br />
+    <footer class="text-center py-4 mt-auto bg-light border-top">
+        <div class="container">
+            <span class="text-muted">&copy; 2025 LANStalker · by Hernán Collazo</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
