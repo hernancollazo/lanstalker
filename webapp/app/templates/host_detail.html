@@ -22,7 +22,7 @@
     <br />
     MAC Address: <strong>{{ host.mac or 'N/A' }}</strong><br />
     Hostname: <strong>{{ host.hostname or 'N/A' }}</strong><br />
-    Last seen online: <strong>{{ host.last_seen or 'N/A' }}</strong><br />
+    Last seen online: <strong>{{ host.last_seen.strftime('%Y-%m-%d %H:%M:%S') or 'N/A' }}</strong><br />
     Vendor: <strong>{{ host.vendor or 'N/A' }}</strong><br />
     OS: <strong>{{ host.os or 'N/A' }}</strong><br />
     Status: {% if host.status == "online" %}

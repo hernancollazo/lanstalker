@@ -10,6 +10,13 @@ load_dotenv()
 
 DB_PATH = os.getenv("DB_PATH", "/db/network.db")
 SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "CHANGE_ME")
+
+if not SECRET_KEY or SECRET_KEY == "CHANGE_ME":
+    raise ValueError("Please set a valid SECRET_KEY in your environment variables.")
+
+if not ADMIN_PASSWORD or ADMIN_PASSWORD == "CHANGE_ME":
+    raise ValueError("Please set a valid ADMIN_PASSWORD in your environment variables.")
 
 app = Flask(__name__)
 
@@ -30,7 +37,8 @@ with app.app_context():
     db.create_all()
     if not User.query.filter_by(username="admin").first():
         u = User(username="admin")
-        u.set_password("changeme")
+        u.set_password(ADMIN_PASSWORD)
+        print(f'Creating admin user with password: {ADMIN_PASSWORD}')
         db.session.add(u)
         db.session.commit()
 
