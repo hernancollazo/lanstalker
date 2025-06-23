@@ -15,6 +15,19 @@
 
 ---
 
+## 📷 Preview
+
+### Dashboard
+![Dashboard Screenshot](doc/screenshot_dashboard.png)
+
+### Active Hosts
+![Active Hosts Screenshot](doc/screenshot_hosts.png)
+
+### Host Details
+![Host Details Screenshot](doc/screenshot_host-details.png)
+
+
+---
 ## 🚀 Getting Started
 
 ### Prerequisites
