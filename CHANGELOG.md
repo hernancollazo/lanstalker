@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## [0.4.0] - 2025-06-23
+### Added
+- Added LICENSE file.
+- Pre-commit was set up with some basic rules.
+
+### Changed
+- Minor issues were fixed to comply with flake, PEP8, etc.
+
 ## [0.3.0] - 2025-06-19
 ### Added
 - `status` field to track host online/offline in real-time.
