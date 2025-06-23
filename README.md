@@ -38,6 +38,8 @@ NETWORK_SEGMENT=192.168.1.0/24
 SCAN_FREQUENCY=300
 DB_PATH=/db/network.db
 XMLS_PATH=/xmls
+SECRET_KEY=CHANGE_ME
+ADMIN_PASSWORD=CHANGE_ME
 ```
 
 ### Build & Run
@@ -49,7 +51,8 @@ docker compose up --build
 - The **scanner** runs continuously in the background, storing results in the database.
 - The **webapp** will be available at: [http://localhost:5000](http://localhost:5000)
 
----
+
+To log into the app, use 'admin' as the username and the password you set in the variable ADMIN_PASSWORD.
 
 ## 🪪 License
 
