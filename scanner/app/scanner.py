@@ -20,6 +20,7 @@ from db import (
     insert_ports,
     get_all_known_macs,
     update_host_status,
+    Host,
 )
 
 # Configure logging
@@ -209,16 +210,25 @@ def start_scanning():
     """Main scanning loop that runs indefinitely based on SCAN_FREQUENCY."""
     with app.app_context():
         while True:
-            known_macs = get_all_known_macs()
             active_hosts = run_ping_scan()
 
-            new_hosts = [(mac, ip) for mac, ip in active_hosts if mac not in known_macs]
+            # Get known MAC -> IP mapping from DB
+            mac_ip_map = {host.mac: host.ip for host in Host.query.all()}
+
+            # Determine hosts that are new or have changed IP
+            hosts_to_scan = []
+            for mac, ip in active_hosts:
+                if mac not in mac_ip_map:
+                    hosts_to_scan.append((mac, ip))  # new host
+                elif ip != mac_ip_map[mac]:
+                    hosts_to_scan.append((mac, ip))  # known MAC, new IP
+
             logging.info(
-                f"Known MACs: {len(known_macs)}, Active: {len(active_hosts)}, New: {len(new_hosts)}"
+                f"Known MACs: {len(mac_ip_map)}, Active: {len(active_hosts)}, To Scan: {len(hosts_to_scan)}"
             )
 
-            for mac, ip in new_hosts:
-                logging.info(f"New host detected: {mac} - {ip}")
+            for mac, ip in hosts_to_scan:
+                logging.info(f"Scanning host: {mac} - {ip}")
                 run_full_scan(ip)
 
             logging.info(f"Sleeping for {SCAN_FREQUENCY} seconds...\n")
