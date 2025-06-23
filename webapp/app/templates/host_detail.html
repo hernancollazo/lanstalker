@@ -39,9 +39,9 @@
             <tr>
                 <th>Port</th>
                 <th>Protocol</th>
+                <th>Banner / Product</th>
                 <th>Service</th>
                 <th>Version</th>
-                <th>State</th>
             </tr>
         </thead>
         <tbody>
@@ -49,9 +49,9 @@
             <tr>
                 <td>{{ port.port }}</td>
                 <td>{{ port.protocol }}</td>
+                <td>{{ port.product }}</td>
                 <td>{{ port.service }}</td>
                 <td>{{ port.version }}</td>
-                <td>{{ port.state }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -60,7 +60,6 @@
     <hr />
     <br />
     <h3>Change History</h3>
-
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-light">

@@ -4,10 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.0] - 2025-06-23
+### Changed
+
+- The banner/product of each scanned port/service was added to the host details screen.
+
 ## [0.5.0] - 2025-06-23
 ### Fixed
 - Ensure hosts with changed IPs are re-scanned and updated in the database.
-
 
 ## [0.4.0] - 2025-06-23
 ### Added
