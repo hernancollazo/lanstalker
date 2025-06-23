@@ -4,17 +4,18 @@ routes.py - Web routes for displaying network hosts and details.
 
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_user, login_required, logout_user
-
+import logging
+import sys
 import ipaddress
 from app import app, db
-from app.models import Host, Port, HostHistory, ChangeLog, User
+from app.models import Host, Port, ChangeLog, User
 from datetime import datetime, timedelta
 
 @app.route("/host/<int:host_id>")
 @login_required
 def host_detail(host_id):
     host = Host.query.get_or_404(host_id)
-    history = HostHistory.query.filter_by(host_id=host.id).order_by(HostHistory.timestamp.desc()).all()
+    history = ChangeLog.query.filter_by(mac=host.mac).order_by(ChangeLog.timestamp.desc()).all()
     return render_template("host_detail.html", host=host, history=history)
 
 
@@ -49,16 +50,14 @@ def index():
 @login_required
 def edit_host(host_id):
     host = Host.query.get_or_404(host_id)
-    print(f"Editing host: {host.id}, IP: {host.ip}, Comments: {host.comments}, Custom Name: {host.custom_name}")
+    history = ChangeLog.query.filter_by(mac=host.mac).order_by(ChangeLog.timestamp.desc()).all()
     if request.method == "POST":
         host.comments = request.form.get("comments")
         host.custom_name = request.form.get("custom_name")
-        print(f"Updating host {host.id} with comments: {host.comments}, custom_name: {host.custom_name}")
         db.session.commit()
         flash("Host updated")
         return redirect(url_for("edit_host", host_id=host.id))
-
-    return render_template("host_detail.html", host=host)
+    return render_template("host_detail.html", host=host, history=history)
 
 
 @app.route("/changelog")

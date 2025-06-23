@@ -27,30 +27,57 @@
         {% endwith %}
 
         {% block content %}
-        <div class="container mt-5">
-            <h2>Login</h2>
-            <form method="POST">
+        <div class="container mt-5" style="max-width: 400px;">
+            <h2 class="text-center mb-4">🔐 Login</h2>
+            <form method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label>Username</label>
-                    <input name="username" class="form-control" required>
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                        <input id="username" name="username" class="form-control" required>
+                        <div class="invalid-feedback">Please enter your username.</div>
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group has-validation">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <input id="password" type="password" name="password" class="form-control" required>
+                        <div class="invalid-feedback">Please enter your password.</div>
+                    </div>
                 </div>
-                <button class="btn btn-primary">Login</button>
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="submit">Login</button>
+                </div>
             </form>
         </div>
         {% endblock %}
     </div>
+
     <br />
     <br />
     <footer class="text-center py-4 mt-auto bg-light border-top">
         <div class="container">
-            <span class="text-muted">&copy; 2025 LANStalker · by Hernán Collazo</span>
+            <span class="text-muted">&copy; 2025 LANStalker</span>
         </div>
     </footer>
 
+    <script>
+        // Bootstrap validation script
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 
 </html>

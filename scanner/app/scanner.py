@@ -35,36 +35,25 @@ XMLS_PATH = os.getenv("XMLS_PATH", "/xmls")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "TELEGRAM_CHAT_ID")
 
-# Validate environment configuration
 if not NETWORK_SEGMENT:
     raise ValueError("NETWORK_SEGMENT environment variable is not set.")
-else:
-    logging.info(f"Scanning network segment: {NETWORK_SEGMENT}")
-
-if not SCAN_FREQUENCY:
-    raise ValueError("SCAN_FREQUENCY environment variable is not set.")
-else:
-    logging.info(f"Scan frequency: {SCAN_FREQUENCY} seconds")
-
-if not DB_PATH:
-    raise ValueError("DB_PATH environment variable is not set.")
-else:
-    logging.info(f"Using database at: {DB_PATH}")
-
-if not XMLS_PATH:
-    raise ValueError("XMLS_PATH environment variable is not set.")
-else:
-    logging.info(f"Processing XMLs from: {XMLS_PATH}")
+logging.info(f"Scanning network segment: {NETWORK_SEGMENT}")
+logging.info(f"Scan frequency: {SCAN_FREQUENCY} seconds")
+logging.info(f"Using database at: {DB_PATH}")
+logging.info(f"Processing XMLs from: {XMLS_PATH}")
 
 if TELEGRAM_TOKEN == "TELEGRAM_TOKEN" or TELEGRAM_CHAT_ID == "TELEGRAM_CHAT_ID":
     logging.warning("Telegram notifications are disabled. Set TELEGRAM_TOKEN and TELEGRAM_CHAT_ID to enable.")
-    TELEGRAM=False
+    TELEGRAM = False
+else:
+    TELEGRAM = True  # Placeholder if later you add the function to send alerts
 
 # Flask app for DB context
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 init_app(app)
+
 
 def run_ping_scan():
     """Performs an ARP discovery scan to find active hosts with MAC addresses."""
@@ -92,6 +81,7 @@ def run_ping_scan():
     logging.info(f"Active hosts with MAC addresses: {len(macs_and_ips)}")
     return macs_and_ips
 
+
 def run_full_scan(ip):
     """Runs a detailed Nmap scan on the specified IP address."""
     logging.info(f"Running full scan on {ip}...")
@@ -105,6 +95,7 @@ def run_full_scan(ip):
     process_scan(output_file)
     os.remove(output_file)
     logging.info("Scan completed.")
+
 
 def parse_nmap_xml(xml_file):
     """Parses an Nmap XML file and extracts host data."""
@@ -165,6 +156,7 @@ def parse_nmap_xml(xml_file):
         })
     return hosts
 
+
 def process_scan(scan_file):
     """Insert parsed scan results into the database and log IP changes."""
     hosts = parse_nmap_xml(scan_file)
@@ -183,16 +175,15 @@ def process_scan(scan_file):
         if is_new:
             msg = f"New host discovered: {host['ip']} ({host.get('mac', 'N/A')})"
             logging.info(msg)
-            # send_telegram_alert(msg)
         elif ip_changed:
             msg = f"MAC {host['mac']} changed IP: now {host['ip']}"
             logging.warning(msg)
-            # send_telegram_alert(msg)
-    # Set all others as offline
+
     known_macs = get_all_known_macs()
     for mac in known_macs:
         if mac not in online_macs:
             update_host_status(mac, False)
+
 
 def start_scanning():
     """Main scanning loop that runs indefinitely based on SCAN_FREQUENCY."""
@@ -210,6 +201,7 @@ def start_scanning():
 
             logging.info(f"Sleeping for {SCAN_FREQUENCY} seconds...\n")
             sleep(SCAN_FREQUENCY)
+
 
 if __name__ == "__main__":
     start_scanning()

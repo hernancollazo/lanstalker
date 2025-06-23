@@ -117,13 +117,7 @@ def insert_or_update_host(mac, ip=None, vendor=None, hostname=None, os_name=None
 
 
 def update_host_status(mac, online):
-    """
-    Updates the 'status' field of a host.
-
-    Args:
-        mac (str): MAC address of the host.
-        online (bool): True if online, False if offline.
-    """
+    """ Updates the 'status' field of a host."""
     host = Host.query.filter_by(mac=mac).first()
     if host:
         new_status = "online" if online else "offline"

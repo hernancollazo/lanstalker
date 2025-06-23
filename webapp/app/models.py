@@ -33,14 +33,6 @@ class Port(db.Model):
     version = db.Column(db.String(128))
 
 
-class HostHistory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    host_id = db.Column(db.Integer, db.ForeignKey('host.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    ip = db.Column(db.String(64))
-    hostname = db.Column(db.String(128))
-
-
 class ChangeLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
