@@ -20,4 +20,3 @@ ENV PYTHONPATH=/app
 
 # Run scanner module
 CMD ["python", "app/scanner.py"]
-

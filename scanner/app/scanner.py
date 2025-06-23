@@ -23,7 +23,9 @@ from db import (
 )
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 # Load environment variables
 load_dotenv()
@@ -43,7 +45,9 @@ logging.info(f"Using database at: {DB_PATH}")
 logging.info(f"Processing XMLs from: {XMLS_PATH}")
 
 if TELEGRAM_TOKEN == "TELEGRAM_TOKEN" or TELEGRAM_CHAT_ID == "TELEGRAM_CHAT_ID":
-    logging.warning("Telegram notifications are disabled. Set TELEGRAM_TOKEN and TELEGRAM_CHAT_ID to enable.")
+    logging.warning(
+        "Telegram notifications are disabled. Set TELEGRAM_TOKEN and TELEGRAM_CHAT_ID to enable."
+    )
     TELEGRAM = False
 else:
     TELEGRAM = True  # Placeholder if later you add the function to send alerts
@@ -135,25 +139,41 @@ def parse_nmap_xml(xml_file):
                 protocol = port.attrib["protocol"]
                 state = port.find("state").attrib["state"]
                 service_elem = port.find("service")
-                service = service_elem.attrib.get("name") if service_elem is not None else None
-                version = service_elem.attrib.get("version") if service_elem is not None else None
-                product = service_elem.attrib.get("product") if service_elem is not None else None
-                ports.append({
-                    "port": port_id,
-                    "protocol": protocol,
-                    "state": state,
-                    "service": service,
-                    "product": product,
-                    "version": version
-                })
-        hosts.append({
-            "ip": ip,
-            "mac": mac,
-            "vendor": vendor,
-            "hostname": hostname,
-            "os": os_name,
-            "ports": ports
-        })
+                service = (
+                    service_elem.attrib.get("name")
+                    if service_elem is not None
+                    else None
+                )
+                version = (
+                    service_elem.attrib.get("version")
+                    if service_elem is not None
+                    else None
+                )
+                product = (
+                    service_elem.attrib.get("product")
+                    if service_elem is not None
+                    else None
+                )
+                ports.append(
+                    {
+                        "port": port_id,
+                        "protocol": protocol,
+                        "state": state,
+                        "service": service,
+                        "product": product,
+                        "version": version,
+                    }
+                )
+        hosts.append(
+            {
+                "ip": ip,
+                "mac": mac,
+                "vendor": vendor,
+                "hostname": hostname,
+                "os": os_name,
+                "ports": ports,
+            }
+        )
     return hosts
 
 
@@ -193,7 +213,9 @@ def start_scanning():
             active_hosts = run_ping_scan()
 
             new_hosts = [(mac, ip) for mac, ip in active_hosts if mac not in known_macs]
-            logging.info(f"Known MACs: {len(known_macs)}, Active: {len(active_hosts)}, New: {len(new_hosts)}")
+            logging.info(
+                f"Known MACs: {len(known_macs)}, Active: {len(active_hosts)}, New: {len(new_hosts)}"
+            )
 
             for mac, ip in new_hosts:
                 logging.info(f"New host detected: {mac} - {ip}")

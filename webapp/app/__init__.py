@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -11,7 +10,7 @@ import os
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 
 # Load environment variables from .env file
@@ -48,8 +47,9 @@ with app.app_context():
 
 # Initialize Flask-Login
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = "login"
 login_manager.init_app(app)
+
 
 # Load user function for Flask-Login
 @login_manager.user_loader

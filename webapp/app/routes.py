@@ -11,22 +11,32 @@ from app import app, db
 from app.models import Host, Port, ChangeLog, User
 from datetime import datetime, timedelta
 
+
 @app.route("/host/<int:host_id>")
 @login_required
 def host_detail(host_id):
     host = Host.query.get_or_404(host_id)
-    history = ChangeLog.query.filter_by(mac=host.mac).order_by(ChangeLog.timestamp.desc()).all()
+    history = (
+        ChangeLog.query.filter_by(mac=host.mac)
+        .order_by(ChangeLog.timestamp.desc())
+        .all()
+    )
     return render_template("host_detail.html", host=host, history=history)
 
 
-@app.route('/hosts')
+@app.route("/hosts")
 @login_required
 def hosts():
     """Display all hosts sorted by last_seen."""
     #    hosts = Host.query.all()
     hosts = Host.query.all()
-    hosts = sorted(hosts, key=lambda h: ipaddress.IPv4Address(h.ip) if h.ip else ipaddress.IPv4Address("0.0.0.0"))
-    return render_template('hosts.html', hosts=hosts)
+    hosts = sorted(
+        hosts,
+        key=lambda h: ipaddress.IPv4Address(h.ip)
+        if h.ip
+        else ipaddress.IPv4Address("0.0.0.0"),
+    )
+    return render_template("hosts.html", hosts=hosts)
 
 
 @app.route("/")
@@ -36,13 +46,16 @@ def index():
     total_macs = db.session.query(Host.mac).distinct().count()
     total_ports = Port.query.count()
     latest_seen = db.session.query(db.func.max(Host.last_seen)).scalar()
-    last_24h = Host.query.filter(Host.last_seen >= datetime.utcnow() - timedelta(days=1)).count()
-    return render_template("index.html",
+    last_24h = Host.query.filter(
+        Host.last_seen >= datetime.utcnow() - timedelta(days=1)
+    ).count()
+    return render_template(
+        "index.html",
         total_hosts=total_hosts,
         total_macs=total_macs,
         total_ports=total_ports,
         latest_seen=latest_seen,
-        last_24h=last_24h
+        last_24h=last_24h,
     )
 
 
@@ -50,7 +63,11 @@ def index():
 @login_required
 def edit_host(host_id):
     host = Host.query.get_or_404(host_id)
-    history = ChangeLog.query.filter_by(mac=host.mac).order_by(ChangeLog.timestamp.desc()).all()
+    history = (
+        ChangeLog.query.filter_by(mac=host.mac)
+        .order_by(ChangeLog.timestamp.desc())
+        .all()
+    )
     if request.method == "POST":
         host.comments = request.form.get("comments")
         host.custom_name = request.form.get("custom_name")
@@ -77,21 +94,21 @@ def delete_host(host_id):
     return redirect(url_for("hosts"))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('index'))
-        flash('Invalid username or password.')
-    return render_template('login.html')
+            return redirect(url_for("index"))
+        flash("Invalid username or password.")
+    return render_template("login.html")
 
 
-@app.route('/logout')
+@app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for("login"))

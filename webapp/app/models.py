@@ -18,13 +18,13 @@ class Host(db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     custom_name = db.Column(db.String(100), nullable=True)
     comments = db.Column(db.Text, nullable=True)
-    ports = db.relationship('Port', backref='host', cascade="all, delete-orphan")
+    ports = db.relationship("Port", backref="host", cascade="all, delete-orphan")
     status = db.Column(db.String(10), default="offline")  # "online" or "offline"
 
 
 class Port(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    host_id = db.Column(db.Integer, db.ForeignKey('host.id'), nullable=False)
+    host_id = db.Column(db.Integer, db.ForeignKey("host.id"), nullable=False)
     port = db.Column(db.Integer)
     protocol = db.Column(db.String(10))
     state = db.Column(db.String(20))

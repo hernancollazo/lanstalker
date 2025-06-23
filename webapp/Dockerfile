@@ -19,4 +19,3 @@ EXPOSE 5000
 
 # Run Flask app via main.py in app package
 CMD ["python", "app/main.py"]
-
