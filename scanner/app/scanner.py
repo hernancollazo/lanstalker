@@ -212,6 +212,16 @@ def start_scanning():
         while True:
             active_hosts = run_ping_scan()
 
+            # Mark all active hosts as online
+            for mac, _ in active_hosts:
+                update_host_status(mac, True)
+
+            # Mark all others as offline
+            known_macs = get_all_known_macs()
+            for mac in known_macs:
+                if mac not in [m for m, _ in active_hosts]:
+                    update_host_status(mac, False)
+
             # Get known MAC -> IP mapping from DB
             mac_ip_map = {host.mac: host.ip for host in Host.query.all()}
 

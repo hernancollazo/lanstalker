@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+## [0.7.0] - 2025-06-24
+### Fixed
+
+- Mark active hosts from ping scan as 'online' even if not rescanned
+- Turned off DEBUG mode in the Flask Web App.
+
 ## [0.6.0] - 2025-06-23
 ### Changed
 
